@@ -35,78 +35,76 @@
   <script src="./static/js/index.js"></script>
 
   <style>
-    /* 最外层容器: 设定为视口高度，相对定位 */
     .hero-video-section {
-      position: relative; /* 子元素绝对定位的基准 */
+      position: relative; 
       width: 100%;
-      height: 100vh; /* ***强制占满视口高度*** */
-      overflow: hidden; /* 防止内容溢出 */
-      background-color: #222; /* 更深的背景色 */
+      height: 100vh; 
+      overflow: hidden; 
+      background-color: #222;
     }
 
-    /* 视频容器: 绝对定位，铺满父元素，放在最底层 */
+
     .hero-video-container {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: 1; /* 放在内容下方 */
+      z-index: 1; 
     }
 
-    /* 视频占位符 (用于遮罩定位) */
+
     .hero-video-placeholder {
       width: 100%;
       height: 100%;
       position: relative;
     }
 
-    /* 视频元素本身 */
     .hero-video-placeholder video {
-      display: block; /* 移除额外空间 */
+      display: block; 
       width: 100%;
       height: 100%;
-      object-fit: cover; /* 保持比例铺满，可能裁剪 */
+      object-fit: cover;
     }
 
-    /* 半透明遮罩 */
+
     .video-overlay-mask {
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.4); /* 调整透明度 */
-        z-index: 2; /* 在视频之上，内容之下 */
+        background: rgba(0, 0, 0, 0.4); 
+        z-index: 2; 
     }
 
 
-    /* 内容叠加层: 绝对定位，居中，放在视频上方 */
-    .hero-overlay-content-wrapper { /* 新增一个 wrapper 用于定位 */
+
+    .hero-overlay-content-wrapper { 
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      z-index: 3; /* 在遮罩之上 */
-      width: 90%; /* 限制最大宽度 */
-      max-width: 1152px; /* Bulma is-max-desktop */
+      z-index: 3; 
+      width: 90%; 
+      max-width: 1152px; 
       text-align: center;
     }
 
-    /* 确保 Bulma hero 背景透明 */
+
     .hero-overlay-content-wrapper .hero {
         background: none !important;
     }
 
-    /* (文字和按钮颜色调整) */
+
     .hero-overlay-content-wrapper .publication-title,
     .hero-overlay-content-wrapper .publication-authors,
     .hero-overlay-content-wrapper .publication-authors a {
       color: white;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.8); /* 增强阴影 */
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
     }
     .hero-overlay-content-wrapper .publication-links .button.is-dark {
-      background-color: rgba(40, 40, 40, 0.75); /* 调整按钮背景 */
+      background-color: rgba(40, 40, 40, 0.75); 
       border-color: transparent;
       color: white;
     }
@@ -114,11 +112,10 @@
       background-color: rgba(60, 60, 60, 0.9);
     }
 
-    /* 导航栏确保在最上面 */
     .navbar {
-        z-index: 4; /* 最高层级 */
-        position: relative; /* 或者 fixed / sticky */
-        /* background-color: rgba(255, 255, 255, 0.8); */ /* 可以根据需要取消注释 */
+        z-index: 4;
+        position: relative; 
+        /* background-color: rgba(255, 255, 255, 0.8); */ 
         /* backdrop-filter: blur(5px); */
     }
   </style>
@@ -159,7 +156,7 @@
 
   <div class="hero-video-container">
     <div class="hero-video-placeholder">
-      <video style="/* CSS 已控制样式 */" muted autoplay loop playsinline>
+      <video style="" muted autoplay loop playsinline>
         <source src="./static/videos/open_box.mp4" type="video/mp4">
       </video>
       <div class="video-overlay-mask"></div>
@@ -247,10 +244,10 @@
          <div class="column"><video poster="" id="video-r2-c3" autoplay controls muted loop playsinline width="100%"><source src="./static/videos/pour_water_shape_rm.mp4" type="video/mp4"></video></div>
        </div>
        <div class="columns is-vcentered" style="margin-bottom: 1.5rem;">
-         <div class="column is-2 has-text-centered"><h5 class="title is-5">Close Lid</h5></div>
-         <div class="column"><video poster="" id="video-r3-c1" autoplay controls muted loop playsinline width="100%"><source src="./static/videos/close_lid.mp4" type="video/mp4"></video></div>
-         <div class="column"><video poster="" id="video-r3-c2" autoplay controls muted loop playsinline width="100%"><source src="./static/videos/close_lid_layout_rm.mp4" type="video/mp4"></video></div>
-         <div class="column"><video poster="" id="video-r3-c3" autoplay controls muted loop playsinline width="100%"><source src="./static/videos/close_lid_shape_rm.mp4" type="video/mp4"></video></div>
+         <div class="column is-2 has-text-centered"><h5 class="title is-5">Put Lid</h5></div>
+         <div class="column"><video poster="" id="video-r3-c1" autoplay controls muted loop playsinline width="100%"><source src="./static/videos/put_lid.mp4" type="video/mp4"></video></div>
+         <div class="column"><video poster="" id="video-r3-c2" autoplay controls muted loop playsinline width="100%"><source src="./static/videos/put_lid_layout_rm.mp4" type="video/mp4"></video></div>
+         <div class="column"><video poster="" id="video-r3-c3" autoplay controls muted loop playsinline width="100%"><source src="./static/videos/put_lid_shape_rm.mp4" type="video/mp4"></video></div>
        </div>
     </div>
   </div>
@@ -261,7 +258,18 @@
        <div class="column is-four-fifths">
          <h2 class="title is-3">Abstract</h2>
          <div class="content has-text-justified">
-           <p>In-context imitation learning...</p>
+           <p>In-context imitation learning allows policies to generalize from few-shot demon-
+              strations, yet it often struggles with unseen objects or novel scenarios. To ad-
+              dress this, we introduce MatchingPolicy, a correspondence-driven framework that
+              decouples demonstration-to-scene matching from policy learning. At its core,
+              MatchingPolicy uses a graph-based diffusion policy that adapts robot actions via
+              dense semantic correspondences. This explicit separation eliminates the challenge
+              of simultaneous correspondence inference and action adaptation, enabling robust
+              transfer. Our approach integrates a vision foundation model with a novel two-stage
+              matching algorithm to dynamically establish reliable correspondences. Empirical
+              evaluations on RLBench and real-world manipulation tasks show that Matching-
+              Policy achieves strong few-shot performance, generalizing consistently across un-
+              seen object instances and categories</p>
          </div>
        </div>
      </div>
