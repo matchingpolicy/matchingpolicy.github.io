@@ -8,17 +8,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>MatchingPolicy: Correspondence-Aware Policy for Cross-Object In-Context Learning</title>
 
-  <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-
+    function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
-
     gtag('config', 'G-PYVRSFMDRL');
   </script>
 
@@ -39,423 +33,275 @@
   <script src="./static/js/bulma-carousel.min.js"></script>
   <script src="./static/js/bulma-slider.min.js"></script>
   <script src="./static/js/index.js"></script>
+
   <style>
-  /* --- 开始添加: 背景视频样式 --- */
-  
-  /* 最外层容器: 设定高度和相对定位 */
-  .hero-video-section {
-    position: relative; /* 让内部元素可以相对它定位 */
-    width: 100%;
-    min-height: 80vh; /* 背景区域的高度，可以改成 100vh 占满屏幕 */
-    overflow: hidden; /* 防止视频溢出 */
-    display: flex; /* 尝试居中内容 */
-    align-items: center;
-    justify-content: center;
-    background-color: #333; /* 视频加载前的深色背景 */
-  }
-  
-  /* 视频容器: 绝对定位，铺满父元素，放在最底层 */
-  .hero-video-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1; /* 放在内容下方 (数字越小越靠后) */
-  }
-  
-  .hero-video-placeholder {
-    width: 100%;
-    height: 100%;
-    position: relative; /* 用于遮罩定位 */
-  }
-  
-  .hero-video-placeholder video {
-    display: block; /* 移除视频下方的空隙 */
-  }
-  
-  /* 内容叠加层 (你原来的hero): 相对定位，透明背景，放在视频上方 */
-  .hero-overlay-content {
-    position: relative; /* 保持在文档流中，但可以设置 z-index */
-    z-index: 2; /* 放在视频上方 (数字越大越靠前) */
-    width: 100%;
-    background: none !important; /* !important 强制覆盖 Bulma 的背景 */
-    padding-top: 5rem; /* 增加上下内边距，避免内容太靠边 */
-    padding-bottom: 5rem;
-  }
-  
-  /* 调整叠加内容的文字颜色 */
-  .hero-overlay-content .publication-title,
-  .hero-overlay-content .publication-authors,
-  .hero-overlay-content .publication-authors a {
-    color: white; /* 文字变白 */
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.7); /* 加一点阴影，更清晰 */
-  }
-  
-  /* 调整叠加内容的按钮样式 */
-  .hero-overlay-content .publication-links .button.is-dark {
-    background-color: rgba(30, 30, 30, 0.7); /* 半透明深灰色背景 */
-    border-color: transparent; /* 去掉边框 */
-    color: white; /* 文字变白 */
-  }
-  .hero-overlay-content .publication-links .button.is-dark:hover {
-    background-color: rgba(50, 50, 50, 0.9); /* 悬停时深一点 */
-  }
-  
-  /* 确保导航栏在最上面 (以防万一) */
-  .navbar {
-      z-index: 3;
-      position: relative; /* 让 z-index 生效 */
-  }
-  /* --- 结束添加: 背景视频样式 --- */
+    /* 最外层容器: 设定为视口高度，相对定位 */
+    .hero-video-section {
+      position: relative; /* 子元素绝对定位的基准 */
+      width: 100%;
+      height: 100vh; /* ***强制占满视口高度*** */
+      overflow: hidden; /* 防止内容溢出 */
+      background-color: #222; /* 更深的背景色 */
+    }
+
+    /* 视频容器: 绝对定位，铺满父元素，放在最底层 */
+    .hero-video-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1; /* 放在内容下方 */
+    }
+
+    /* 视频占位符 (用于遮罩定位) */
+    .hero-video-placeholder {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    /* 视频元素本身 */
+    .hero-video-placeholder video {
+      display: block; /* 移除额外空间 */
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* 保持比例铺满，可能裁剪 */
+    }
+
+    /* 半透明遮罩 */
+    .video-overlay-mask {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4); /* 调整透明度 */
+        z-index: 2; /* 在视频之上，内容之下 */
+    }
+
+
+    /* 内容叠加层: 绝对定位，居中，放在视频上方 */
+    .hero-overlay-content-wrapper { /* 新增一个 wrapper 用于定位 */
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 3; /* 在遮罩之上 */
+      width: 90%; /* 限制最大宽度 */
+      max-width: 1152px; /* Bulma is-max-desktop */
+      text-align: center;
+    }
+
+    /* 确保 Bulma hero 背景透明 */
+    .hero-overlay-content-wrapper .hero {
+        background: none !important;
+    }
+
+    /* (文字和按钮颜色调整) */
+    .hero-overlay-content-wrapper .publication-title,
+    .hero-overlay-content-wrapper .publication-authors,
+    .hero-overlay-content-wrapper .publication-authors a {
+      color: white;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.8); /* 增强阴影 */
+    }
+    .hero-overlay-content-wrapper .publication-links .button.is-dark {
+      background-color: rgba(40, 40, 40, 0.75); /* 调整按钮背景 */
+      border-color: transparent;
+      color: white;
+    }
+    .hero-overlay-content-wrapper .publication-links .button.is-dark:hover {
+      background-color: rgba(60, 60, 60, 0.9);
+    }
+
+    /* 导航栏确保在最上面 */
+    .navbar {
+        z-index: 4; /* 最高层级 */
+        position: relative; /* 或者 fixed / sticky */
+        /* background-color: rgba(255, 255, 255, 0.8); */ /* 可以根据需要取消注释 */
+        /* backdrop-filter: blur(5px); */
+    }
   </style>
-</head>
+  </head>
 <body>
 
 <nav class="navbar" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
-    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-    </a>
-  </div>
-  <div class="navbar-menu">
-    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
-      <a class="navbar-item" href="https://xxx">
-      <span class="icon">
-          <i class="fas fa-home"></i>
-      </span>
-      </a>
+     <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+       <span aria-hidden="true"></span>
+       <span aria-hidden="true"></span>
+       <span aria-hidden="true"></span>
+     </a>
+   </div>
+   <div class="navbar-menu">
+     <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+       <a class="navbar-item" href="https://xxx">
+       <span class="icon">
+           <i class="fas fa-home"></i>
+       </span>
+       </a>
 
-      <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link">
-          More Research
-        </a>
-        <div class="navbar-dropdown">
-          <a class="navbar-item" href="https://iclr2026.github.io/matchingpolicy.github.io/">
-            MatchingPolicy
-        </div>
-      </div>
-    </div>
-
-  </div>
+       <div class="navbar-item has-dropdown is-hoverable">
+         <a class="navbar-link">
+           More Research
+         </a>
+         <div class="navbar-dropdown">
+           <a class="navbar-item" href="https://iclr2026.github.io/matchingpolicy.github.io/">
+             MatchingPolicy
+           </a>
+         </div>
+       </div>
+     </div>
+   </div>
 </nav>
 
 <section class="hero-video-section">
 
   <div class="hero-video-container">
     <div class="hero-video-placeholder">
-      <video style="width:100%; height:100%; object-fit: cover;" muted autoplay loop playsinline>
+      <video style="/* CSS 已控制样式 */" muted autoplay loop playsinline>
         <source src="./static/videos/open_box.mp4" type="video/mp4">
       </video>
-      <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.3);"></div>
+      <div class="video-overlay-mask"></div>
     </div>
   </div>
 
-  <section class="hero hero-overlay-content">
-    <div class="hero-body">
-      <div class="container is-max-desktop">
-        <div class="columns is-centered">
-          <div class="column has-text-centered">
-            <h1 class="title is-1 publication-title">MatchingPolicy: Correspondence-Aware Policy for Cross-Object In-Context Learning</h1>
-            <div class="is-size-5 publication-authors">
-              <span class="author-block">
-                <a href="http://aaa">Anonymous</a><sup>1</sup>,
-              </span>
-            </div>
-            <div class="is-size-5 publication-authors">
-              <span class="author-block"><sup>1</sup>University of XXX,</span>
-            </div>
-            <div class="column has-text-centered">
-              <div class="publication-links">
-                 <span class="link-block">
-                   <a href="https://arxiv.org/pdf/xxx"
-                      class="external-link button is-normal is-rounded is-dark">
-                     <span class="icon"><i class="fas fa-file-pdf"></i></span>
-                     <span>Paper</span>
-                   </a>
-                 </span>
-                 <span class="link-block">
-                   <a href="https://arxiv.org/abs/2011.12948"
-                      class="external-link button is-normal is-rounded is-dark">
-                     <span class="icon"><i class="ai ai-arxiv"></i></span>
-                     <span>arXiv</span>
-                   </a>
-                 </span>
-                 <span class="link-block">
-                   <a href="https://www.youtube.com/xxx"
-                      class="external-link button is-normal is-rounded is-dark">
-                     <span class="icon"><i class="fab fa-youtube"></i></span>
-                     <span>Video</span>
-                   </a>
-                 </span>
-                 <span class="link-block">
-                   <a href="https://github.com/google/xxx"
-                      class="external-link button is-normal is-rounded is-dark">
-                     <span class="icon"><i class="fab fa-github"></i></span>
-                     <span>Code</span>
-                   </a>
-                 </span>
-                 <span class="link-block">
-                   <a href="https://github.com/google/xxx"
-                      class="external-link button is-normal is-rounded is-dark">
-                     <span class="icon"><i class="far fa-images"></i></span>
-                     <span>Data</span>
-                   </a>
-                 </span>
+  <div class="hero-overlay-content-wrapper">
+      <section class="hero"> <div class="hero-body" style="padding: 1rem 0;"> <div class="container is-max-desktop">
+            <div class="columns is-centered">
+              <div class="column has-text-centered">
+                <h1 class="title is-1 publication-title">MatchingPolicy: Correspondence-Aware Policy for Cross-Object In-Context Learning</h1>
+                <div class="is-size-5 publication-authors">
+                  <span class="author-block">
+                    <a href="http://aaa">Anonymous</a><sup>1</sup>,
+                  </span>
+                </div>
+                <div class="is-size-5 publication-authors">
+                  <span class="author-block"><sup>1</sup>University of XXX,</span>
+                </div>
+                <div class="column has-text-centered">
+                  <div class="publication-links">
+                     <span class="link-block">
+                       <a href="https://arxiv.org/pdf/xxx"
+                          class="external-link button is-normal is-rounded is-dark">
+                         <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                         <span>Paper</span>
+                       </a>
+                     </span>
+                     <span class="link-block">
+                       <a href="https://arxiv.org/abs/2011.12948"
+                          class="external-link button is-normal is-rounded is-dark">
+                         <span class="icon"><i class="ai ai-arxiv"></i></span>
+                         <span>arXiv</span>
+                       </a>
+                     </span>
+                     <span class="link-block">
+                       <a href="https://www.youtube.com/xxx"
+                          class="external-link button is-normal is-rounded is-dark">
+                         <span class="icon"><i class="fab fa-youtube"></i></span>
+                         <span>Video</span>
+                       </a>
+                     </span>
+                     <span class="link-block">
+                       <a href="https://github.com/google/xxx"
+                          class="external-link button is-normal is-rounded is-dark">
+                         <span class="icon"><i class="fab fa-github"></i></span>
+                         <span>Code</span>
+                       </a>
+                     </span>
+                     <span class="link-block">
+                       <a href="https://github.com/google/xxx"
+                          class="external-link button is-normal is-rounded is-dark">
+                         <span class="icon"><i class="far fa-images"></i></span>
+                         <span>Data</span>
+                       </a>
+                     </span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
-
-</section>
-<section class="hero is-light is-small">
-  </section>
-
-<section class="section">
-</section>
-  
-<!-- 
-<section class="hero">
-  <div class="hero-body">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered">
-        <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">MatchingPolicy: Correspondence-Aware Policy for Cross-Object In-Context Learning</h1>
-          <div class="is-size-5 publication-authors">
-            <span class="author-block">
-              <a href="http://aaa">Anonymous</a><sup>1</sup>,
-            </span>
-          </div>
-
-          <div class="is-size-5 publication-authors">
-            <span class="author-block"><sup>1</sup>University of XXX,</span>
-          </div>
-
-          <div class="column has-text-centered">
-            <div class="publication-links">
-              <!-- PDF Link. -->
-              <span class="link-block">
-                <a href="https://arxiv.org/pdf/xxx"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fas fa-file-pdf"></i>
-                  </span>
-                  <span>Paper</span>
-                </a>
-              </span>
-              <span class="link-block">
-                <a href="https://arxiv.org/abs/2011.12948"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="ai ai-arxiv"></i>
-                  </span>
-                  <span>arXiv</span>
-                </a>
-              </span>
-              <!-- Video Link. -->
-              <span class="link-block">
-                <a href="https://www.youtube.com/xxx"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fab fa-youtube"></i>
-                  </span>
-                  <span>Video</span>
-                </a>
-              </span>
-              <!-- Code Link. -->
-              <span class="link-block">
-                <a href="https://github.com/google/xxx"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fab fa-github"></i>
-                  </span>
-                  <span>Code</span>
-                  </a>
-              </span>
-              <!-- Dataset Link. -->
-              <span class="link-block">
-                <a href="https://github.com/google/xxx"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="far fa-images"></i>
-                  </span>
-                  <span>Data</span>
-                  </a>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section> -->
-
+      </section>
+  </div> </section>
 <section class="hero is-light is-small">
   <div class="hero-body">
     <div class="container">
-
       <div class="columns is-vcentered has-text-centered">
-        <div class="column is-2"> <h4 class="title is-5">&nbsp;</h4> </div>
-        <div class="column">
-          <h4 class="title is-5">human demo</h4>
-        </div>
-        <div class="column">
-          <h4 class="title is-5">layout generalization</h4>
-        </div>
-        <div class="column">
-          <h4 class="title is-5">object generalization</h4>
-        </div>
-      </div>
-
-      <hr style="margin-top: 0; margin-bottom: 1rem;"> <div class="columns is-vcentered" style="margin-bottom: 1.5rem;"> <div class="column is-2 has-text-centered"> <h5 class="title is-5">Open Box</h5>
-        </div>
-        <div class="column"> <video poster="" id="video-r1-c1" autoplay controls muted loop playsinline width="100%"> <source src="./static/videos/open_box.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="column"> <video poster="" id="video-r1-c2" autoplay controls muted loop playsinline width="100%">
-            <source src="./static/videos/open_box_layout_rm.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="column"> <video poster="" id="video-r1-c3" autoplay controls muted loop playsinline width="100%">
-            <source src="./static/videos/open_box_shape_rm.mp4" type="video/mp4">
-          </video>
-        </div>
-      </div>
-
-      <div class="columns is-vcentered" style="margin-bottom: 1.5rem;">
-        <div class="column is-2 has-text-centered">
-          <h5 class="title is-5">Pour Water</h5>
-        </div>
-        <div class="column">
-          <video poster="" id="video-r2-c1" autoplay controls muted loop playsinline width="100%">
-            <source src="./static/videos/pour_water.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="column">
-          <video poster="" id="video-r2-c2" autoplay controls muted loop playsinline width="100%">
-            <source src="./static/videos/pour_water_layout_rm.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="column">
-          <video poster="" id="video-r2-c3" autoplay controls muted loop playsinline width="100%">
-            <source src="./static/videos/pour_water_shape_rm.mp4" type="video/mp4">
-          </video>
-        </div>
-      </div>
-
-      <div class="columns is-vcentered" style="margin-bottom: 1.5rem;">
-        <div class="column is-2 has-text-centered">
-          <h5 class="title is-5">Close Lid</h5>
-        </div>
-        <div class="column">
-          <video poster="" id="video-r3-c1" autoplay controls muted loop playsinline width="100%">
-            <source src="./static/videos/close_lid.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="column">
-          <video poster="" id="video-r3-c2" autoplay controls muted loop playsinline width="100%">
-            <source src="./static/videos/close_lid_layout_rm.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="column">
-          <video poster="" id="video-r3-c3" autoplay controls muted loop playsinline width="100%">
-            <source src="./static/videos/close_lid_shape_rm.mp4" type="video/mp4">
-          </video>
-        </div>
-      </div>
-
-    </div> </div> </section>
-
-
-<section class="section">
-  <div class="container is-max-desktop">
-    <!-- Abstract. -->
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Abstract</h2>
-        <div class="content has-text-justified">
-          <p>
-            In-context imitation learning allows policies to generalize from few-shot demonstrations, yet it often struggles with unseen objects or novel scenarios. To address this, we introduce MatchingPolicy, a correspondence-driven framework that decouples demonstration-to-scene matching from policy learning. At its core, MatchingPolicy uses a graph-based diffusion policy that adapts robot actions via dense semantic correspondences. This explicit separation eliminates the challenge of simultaneous correspondence inference and action adaptation, enabling robust transfer. Our approach integrates a vision foundation model with a novel two-stage matching algorithm to dynamically establish reliable correspondences. Empirical evaluations on RLBench and real-world manipulation tasks show that MatchingPolicy achieves strong few-shot performance, generalizing consistently across unseen object instances and categories.
-          </p>
-
-        </div>
-      </div>
+         <div class="column is-2"> <h4 class="title is-5">&nbsp;</h4> </div>
+         <div class="column"><h4 class="title is-5">human demo</h4></div>
+         <div class="column"><h4 class="title is-5">layout generalization</h4></div>
+         <div class="column"><h4 class="title is-5">object generalization</h4></div>
+       </div>
+       <hr style="margin-top: 0; margin-bottom: 1rem;">
+       <div class="columns is-vcentered" style="margin-bottom: 1.5rem;">
+         <div class="column is-2 has-text-centered"><h5 class="title is-5">Open Box</h5></div>
+         <div class="column"><video poster="" id="video-r1-c1" autoplay controls muted loop playsinline width="100%"><source src="./static/videos/open_box.mp4" type="video/mp4"></video></div>
+         <div class="column"><video poster="" id="video-r1-c2" autoplay controls muted loop playsinline width="100%"><source src="./static/videos/open_box_layout_rm.mp4" type="video/mp4"></video></div>
+         <div class="column"><video poster="" id="video-r1-c3" autoplay controls muted loop playsinline width="100%"><source src="./static/videos/open_box_shape_rm.mp4" type="video/mp4"></video></div>
+       </div>
+       <div class="columns is-vcentered" style="margin-bottom: 1.5rem;">
+         <div class="column is-2 has-text-centered"><h5 class="title is-5">Pour Water</h5></div>
+         <div class="column"><video poster="" id="video-r2-c1" autoplay controls muted loop playsinline width="100%"><source src="./static/videos/pour_water.mp4" type="video/mp4"></video></div>
+         <div class="column"><video poster="" id="video-r2-c2" autoplay controls muted loop playsinline width="100%"><source src="./static/videos/pour_water_layout_rm.mp4" type="video/mp4"></video></div>
+         <div class="column"><video poster="" id="video-r2-c3" autoplay controls muted loop playsinline width="100%"><source src="./static/videos/pour_water_shape_rm.mp4" type="video/mp4"></video></div>
+       </div>
+       <div class="columns is-vcentered" style="margin-bottom: 1.5rem;">
+         <div class="column is-2 has-text-centered"><h5 class="title is-5">Close Lid</h5></div>
+         <div class="column"><video poster="" id="video-r3-c1" autoplay controls muted loop playsinline width="100%"><source src="./static/videos/close_lid.mp4" type="video/mp4"></video></div>
+         <div class="column"><video poster="" id="video-r3-c2" autoplay controls muted loop playsinline width="100%"><source src="./static/videos/close_lid_layout_rm.mp4" type="video/mp4"></video></div>
+         <div class="column"><video poster="" id="video-r3-c3" autoplay controls muted loop playsinline width="100%"><source src="./static/videos/close_lid_shape_rm.mp4" type="video/mp4"></video></div>
+       </div>
     </div>
-    <!--/ Abstract. -->
-
-    <!-- Paper video. -->
-    <!-- <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Video</h2>
-        <div class="publication-video">
-          <iframe src="https://www.youtube.com/embed/MrKrnHhk8IA?rel=0&amp;showinfo=0"
-                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-        </div>
-      </div>
-    </div> -->
-    <!--/ Paper video. -->
   </div>
 </section>
-
 <section class="section">
   <div class="container is-max-desktop">
-    <!-- Concurrent Work. -->
     <div class="columns is-centered has-text-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-3">Method Overview</h2>
-        <div class="content has-text-justified">
-          <img src="./static/images/pipeline_real_v2.png">
-
-          <p><strong>Overall Framework of MatchingPolicy</strong>. The overview of MatchingPolicy. Correspondence points are extracted using a two-stage feature matching algorithm and passed into a graph-based diffusion policy model, which predicts the 6D motions of the gripper. These motions are subsequently converted into robot joint commands.</p>
-
-        </div>
-      </div>
-    </div>
-    <!--/ Concurrent Work. -->
-
-
+       <div class="column is-four-fifths">
+         <h2 class="title is-3">Abstract</h2>
+         <div class="content has-text-justified">
+           <p>In-context imitation learning...</p>
+         </div>
+       </div>
+     </div>
+  </div>
+</section>
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+       <div class="column is-full-width">
+         <h2 class="title is-3">Method Overview</h2>
+         <div class="content has-text-justified">
+           <img src="./static/images/pipeline_real_v2.png">
+           <p><strong>Overall Framework...</strong></p>
+         </div>
+       </div>
+     </div>
+  </div>
+</section>
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
-    <pre><code>@article{matchingpolicy,
-  author    = {XXX},
-  title     = {MatchingPolicy: Correspondence-Aware Policy for Cross-Object In-Context Learning},
-  journal   = {xxx},
-  year      = {xxx},
-}</code></pre>
+     <pre><code>@article{matchingpolicy,...}</code></pre>
   </div>
 </section>
-
-
 <footer class="footer">
   <div class="container">
-    <div class="content has-text-centered">
-      <a class="icon-link"
-         href="./static/videos/xxx">
-        <i class="fas fa-file-pdf"></i>
-      </a>
-      <a class="icon-link" href="https://github.com/xxx" class="external-link" disabled>
-        <i class="fab fa-github"></i>
-      </a>
-    </div>
     <div class="columns is-centered">
       <div class="column is-8">
-        <div class="content">
-          <p>
+        <div class="content has-text-centered"> <p>
             This website is licensed under a <a rel="license"
-                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+               href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
             Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p style="font-size: 0.8rem; margin-top: 0.5rem;">
+             Website template adapted from <a href="https://nerfies.github.io/" target="_blank">Nerfies</a>.
           </p>
         </div>
       </div>
     </div>
   </div>
 </footer>
-
 </body>
 </html>
