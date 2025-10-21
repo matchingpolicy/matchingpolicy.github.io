@@ -157,7 +157,7 @@
   <div class="hero-video-container">
     <div class="hero-video-placeholder">
       <video style="" muted autoplay loop playsinline>
-        <source src="./static/videos/open_box.mp4" type="video/mp4">
+        <source src="./static/videos/background.mp4" type="video/mp4">
       </video>
       <div class="video-overlay-mask"></div>
     </div>
@@ -221,6 +221,41 @@
         </div>
       </section>
   </div> </section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+       <div class="column is-four-fifths">
+         <h2 class="title is-3">Abstract</h2>
+         <div class="content has-text-justified">
+           <p>In-context imitation learning allows policies to generalize from few-shot demonstrations, yet it often struggles with unseen objects or novel scenarios. To address this, we introduce MatchingPolicy,
+             a correspondence-driven framework that decouples demonstration-to-scene matching from policy learning. At its core, MatchingPolicy uses a graph-based diffusion policy that adapts robot actions via
+              dense semantic correspondences. This explicit separation eliminates the challenge of simultaneous correspondence inference and action adaptation, enabling robust
+              transfer. Our approach integrates a vision foundation model with a novel two-stage matching algorithm to dynamically establish reliable correspondences. Empirical
+              evaluations on RLBench and real-world manipulation tasks show that Matching-Policy achieves strong few-shot performance, generalizing consistently across unseen object instances and categories.</p>
+         </div>
+       </div>
+     </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+       <div class="column is-full-width">
+         <h2 class="title is-3">Method Overview</h2>
+         <div class="content has-text-justified">
+           <img src="./static/images/pipeline_real_v2.png">
+           <p><strong>The overview of MatchingPolicy. </strong>Correspondence points are extracted using a two-stage
+                feature matching algorithm and passed into a graph-based diffusion policy model, which predicts the
+                6D motions of the gripper. These motions are subsequently converted into robot joint commands.</p>
+         </div>
+       </div>
+     </div>
+  </div>
+</section>
+  
 <section class="hero is-light is-small">
   <div class="hero-body">
     <div class="container">
@@ -252,35 +287,13 @@
     </div>
   </div>
 </section>
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-       <div class="column is-four-fifths">
-         <h2 class="title is-3">Abstract</h2>
-         <div class="content has-text-justified">
-           <p>In-context imitation learning allows policies to generalize from few-shot demonstrations, yet it often struggles with unseen objects or novel scenarios. To address this, we introduce MatchingPolicy,
-             a correspondence-driven framework that decouples demonstration-to-scene matching from policy learning. At its core, MatchingPolicy uses a graph-based diffusion policy that adapts robot actions via
-              dense semantic correspondences. This explicit separation eliminates the challenge of simultaneous correspondence inference and action adaptation, enabling robust
-              transfer. Our approach integrates a vision foundation model with a novel two-stage matching algorithm to dynamically establish reliable correspondences. Empirical
-              evaluations on RLBench and real-world manipulation tasks show that Matching-Policy achieves strong few-shot performance, generalizing consistently across unseen object instances and categories</p>
-         </div>
-       </div>
-     </div>
-  </div>
-</section>
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-       <div class="column is-full-width">
-         <h2 class="title is-3">Method Overview</h2>
-         <div class="content has-text-justified">
-           <img src="./static/images/pipeline_real_v2.png">
-           <p><strong>Overall Framework...</strong></p>
-         </div>
-       </div>
-     </div>
-  </div>
-</section>
+
+  
+
+
+
+  
+
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
