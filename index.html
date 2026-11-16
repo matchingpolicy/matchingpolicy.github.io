@@ -277,30 +277,15 @@
 
 <section class="section">
   <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-3">Method Overview</h2>
-
-        <div class="content has-text-justified">
-          <iframe
-            src="./static/images/pipeline_real_v2.pdf#toolbar=0&navpanes=0&view=FitH"
-            title="MatchingPolicy Method Overview"
-            width="100%"
-            height="550"
-            style="display: block; border: none;">
-          </iframe>
-
-          <p>
-            <strong>Overall Framework of MatchingPolicy.</strong>
-            A two-stage matching algorithm extracts correspondences
-            between demonstrations and the current scene. These
-            correspondences condition a graph-based diffusion policy
-            that predicts 6D gripper motions, which are converted
-            into robot joint commands through inverse kinematics.
-          </p>
-        </div>
-      </div>
-    </div>
+     <div class="columns is-centered has-text-centered">
+       <div class="column is-full-width">
+         <h2 class="title is-3">Method Overview</h2>
+         <div class="content has-text-justified">
+           <img src="./static/images/pipeline_real_v2.png">
+           <p><strong>Overall Framework of MatchingPolicy</strong>. The overview of MatchingPolicy. Correspondence points are extracted using a two-stage feature matching algorithm and passed into a graph-based diffusion policy model, which predicts the 6D motions of a gripper. These motions are subsequently converted into robot joint commands.</p>
+         </div>
+       </div>
+     </div>
   </div>
 </section>
 
