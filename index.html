@@ -566,32 +566,64 @@
 
 
 
-<section class="hero is-light is-small" style="margin-top: 2rem; margin-bottom: 2rem;">
+<section class="hero is-light is-small"
+         style="margin-top: 2rem; margin-bottom: 2rem;">
   <div class="hero-body">
     <div class="container">
 
-      <h2 class="title is-3 has-text-centered">Failure Analysis: InstantPolicy</h2>
-
+      <h2 class="title is-3 has-text-centered">Failure Analysis</h2>
       <hr class="header-separator">
 
-      <div class="columns is-centered">
-        <div class="column is-two-thirds">
+      <div class="columns">
 
-            <video poster="" id="video-failure" autoplay controls muted loop playsinline width="100%" style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-                <source src="./static/videos/record_fail_rm.mp4" type="video/mp4">
-            </video>
-            
-            <div class="content has-text-centered is-size-6" style="margin-top: 1rem;">
-              <p>
-                <strong>Failure Case of InstantPolicy:</strong> 
-                Here, the baseline fails to interact with the target object correctly because 
-                it relies on implicit geometric features which are ambiguous in this layout.
-                </p>
-            </div>
+        <!-- Left: InstantPolicy -->
+        <div class="column is-half">
+          <h3 class="title is-5 has-text-centered">InstantPolicy</h3>
+          <p class="subtitle is-6 has-text-centered">
+            Interaction Failure
+          </p>
 
+          <video id="video-failure"
+                 autoplay controls muted loop playsinline
+                 width="100%" style="border-radius: 8px;">
+            <source src="./static/videos/record_fail_rm.mp4"
+                    type="video/mp4">
+          </video>
+
+          <p class="has-text-centered" style="margin-top: 1rem;">
+            Failure to interact with the intended object.
+          </p>
         </div>
-      </div>
 
+        <!-- Right: Trajectory Retargeting vs. MatchingPolicy -->
+        <div class="column is-half" id="retargeting-comparison">
+          <h3 class="title is-5 has-text-centered">
+            Trajectory Retargeting vs. MatchingPolicy
+          </h3>
+          <p class="subtitle is-6 has-text-centered">
+            Additional comparison for Reviewer oNZa
+          </p>
+
+          <video id="video-retargeting-comparison"
+                 autoplay controls muted loop playsinline
+                 width="100%" style="border-radius: 8px;">
+            <source src="./static/videos/comparison.mp4"
+                    type="video/mp4">
+          </video>
+
+          <div class="has-text-centered" style="margin-top: 1rem;">
+            <p>
+              <strong>Trajectory Retargeting:</strong>
+              Limited Adaptability
+            </p>
+            <p>
+              <strong>MatchingPolicy:</strong>
+              Grasp-Aware Adaptation
+            </p>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 </section>
